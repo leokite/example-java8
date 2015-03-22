@@ -144,7 +144,7 @@ public class LambdaTest {
         assertThat(f, instanceOf(Serializable.class));
     }
 
-    public static class Student {
+    private static class Student {
         private final int score;
         public Student(int score) {
             this.score = score;

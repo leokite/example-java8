@@ -9,8 +9,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -162,7 +164,6 @@ public class StreamTest {
     /**
      * 終端操作
      * Streamパイプラインを実行して、何らかの結果を取得する処理。
-     * forEachは戻り値を返さない。
      */
     @Test
     public void terminalOperations() {
@@ -185,7 +186,21 @@ public class StreamTest {
             (b1, b2) -> b1.append(b2)); // combiner (R, R) -> void: 結果オブジェクト同士をつないで1つの結果にする関数
         assertThat(sb.toString(), is("abcd"));
 
-        // TODO その他の操作
+        // min: 最小値を返す。比較関数(Comparator)を渡す。
+        List<String> list4 = Arrays.asList("b", "a", "d", "c");
+        Optional<String> min = list4.stream().min(Comparator.naturalOrder());
+        assertThat(min.get(), is("a"));
+
+        // findFirst: 先頭の値を返す。
+        List<String> list5 = Arrays.asList("a", "b", "c");
+        Optional<String> first = list5.stream().findFirst();
+        assertThat(first.get(), is("a"));
+
+        // allMatch: すべての値が条件に合致したらtrueを返す。条件判定の関数(Predicate)を渡す。
+        List<String> list6 = Arrays.asList("a", "b", "c");
+        boolean allMatch = list6.stream().allMatch(s6 -> s6.length() == 1);
+        assertThat(allMatch, is(Boolean.TRUE));
+
     }
 
 }
